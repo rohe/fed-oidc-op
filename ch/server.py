@@ -6,8 +6,9 @@ import sys
 from urllib.parse import urlparse
 
 from oidcmsg.key_jar import init_key_jar
-from oidcendpoint.endpoint_context import EndpointContext
 from oidcop.cherrypy import OpenIDProvider
+
+from fedoidcendpoint.endpoint_context import EndpointContext
 
 logger = logging.getLogger("")
 LOGFILE_NAME = 'op.log'

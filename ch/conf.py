@@ -1,4 +1,3 @@
-
 from fedoidcendpoint.oidc import provider_config
 from fedoidcendpoint.oidc import registration
 
@@ -10,6 +9,9 @@ from oidcendpoint.oidc.userinfo import UserInfo
 from oidcendpoint.user_authn.authn_context import INTERNETPROTOCOLPASSWORD
 
 from oidcop.util import JSONDictDB
+
+KEYDEFS = [{"type": "RSA", "key": '', "use": ["sig"]},
+           {"type": "EC", "crv": "P-256", "use": ["sig"]}]
 
 RESPONSE_TYPES_SUPPORTED = [
     ["code"], ["token"], ["id_token"], ["code", "token"], ["code", "id_token"],
@@ -29,15 +31,15 @@ CAPABILITIES = {
     "claims_parameter_supported": True,
     "request_parameter_supported": True,
     "request_uri_parameter_supported": True,
-}
+    }
 
 CONFIG = {
     'provider': {
         'key_defs': [
             {"type": "RSA", "use": ["sig"]},
             {"type": "EC", "crv": "P-256", "use": ["sig"]}
-        ],
-    },
+            ],
+        },
     'server_info': {
         "issuer": "https://127.0.0.1:8100/",
         "password": "mycket hemligt",
@@ -51,42 +53,42 @@ CONFIG = {
             'url_path': 'static/jwks.json',
             'local_path': 'static/jwks.json',
             'private_path': 'own/jwks.json'
-        },
+            },
         'endpoint': {
             'webfinger': {
-                'path': '.well-known/webfinger',
+                'path': '{}/.well-known/webfinger',
                 'class': Discovery,
                 'kwargs': {'client_authn_method': None}
-            },
+                },
             'provider_info': {
-                'path': '.well-known/openid-configuration',
+                'path': '{}/.well-known/openid-configuration',
                 'class': provider_config.ProviderConfiguration,
                 'kwargs': {'client_authn_method': None}
-            },
+                },
             'registration': {
-                'path': 'registration',
+                'path': '{}/registration',
                 'class': registration.Registration,
                 'kwargs': {'client_authn_method': None}
-            },
+                },
             'authorization': {
-                'path': 'authorization',
+                'path': '{}/authorization',
                 'class': Authorization,
                 'kwargs': {'client_authn_method': None}
-            },
+                },
             'token': {
-                'path': 'token',
+                'path': '{}/token',
                 'class': AccessToken,
                 'kwargs': {}
-            },
+                },
             'userinfo': {
-                'path': 'userinfo',
+                'path': '{}/userinfo',
                 'class': UserInfo,
-            }
-        },
+                }
+            },
         'userinfo': {
             'class': user_info.UserInfo,
             'kwargs': {'db_file': 'users.json'}
-        },
+            },
         'authentication': [
             {
                 'acr': INTERNETPROTOCOLPASSWORD,
@@ -97,24 +99,41 @@ CONFIG = {
                         'class': JSONDictDB,
                         'kwargs':
                             {'json_path': 'passwd.json'}
-                    },
+                        },
                     'page_header': "Testing log in",
                     'submit_btn': "Get me in!",
                     'user_label': "Nickname",
                     'passwd_label': "Secret sauce"
-                }
-            },
+                    }
+                },
             {
                 'acr': 'anon',
                 'name': 'NoAuthn',
                 'kwargs': {'user': 'diana'}
+                }
+            ],
+        'federation': {
+            'signer': {
+                'signing_service': {
+                    'type': 'internal',
+                    'private_path': './private_mdss_keys',
+                    'key_defs': KEYDEFS,
+                    'public_path': './public_mdss_keys'
+                    },
+                'ms_dir': 'sms'
+                },
+            'fo_bundle': {
+                'dir': 'fo_bundle'
+                },
+            'private_path': './entity_keys',
+            'key_defs': KEYDEFS,
+            'public_path': './pub_entity_keys'
             }
-        ]
-    },
+        },
     'webserver': {
         'cert': 'certs/cert.pem',
         'key': 'certs/key.pem',
         'cert_chain': '',
         'port': 8100,
+        }
     }
-}
