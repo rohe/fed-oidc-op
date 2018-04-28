@@ -123,11 +123,8 @@ CONFIG = {
                 'ms_dir': 'sms'
                 },
             'fo_bundle': {
-                'dir': 'fo_bundle'
+                'dir': 'public/fo_bundle'
                 },
-            'private_path': './entity_keys',
-            'key_defs': KEYDEFS,
-            'public_path': './pub_entity_keys'
             }
         },
     'webserver': {
