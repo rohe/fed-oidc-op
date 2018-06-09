@@ -6,7 +6,8 @@ import sys
 from urllib.parse import urlparse
 
 from oidcmsg.key_jar import init_key_jar
-from oidcop.cherrypy import OpenIDProvider
+from oidcop.cherryp import OpenIDProvider
+from oidcop.cookie import CookieDealer
 
 from fedoidcendpoint.endpoint_context import EndpointContext
 
@@ -82,8 +83,10 @@ if __name__ == '__main__':
                        key_defs=_provider_config['key_defs'],
                        public_path=_jwks_config['local_path'])
 
+    cookie_dealer = CookieDealer(**_server_info_config['cookie_dealer'])
+
     endpoint_context = EndpointContext(config.CONFIG['server_info'], keyjar=_kj,
-                                       cwd=folder)
+                                       cwd=folder, cookie_dealer=cookie_dealer)
 
     for endp in endpoint_context.endpoint.values():
         p = urlparse(endp.endpoint_path)

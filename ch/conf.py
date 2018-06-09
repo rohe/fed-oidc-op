@@ -41,7 +41,7 @@ CONFIG = {
             ],
         },
     'server_info': {
-        "issuer": "https://127.0.0.1:8100/",
+        "issuer": "https://127.0.0.1:8102/",
         "password": "mycket hemligt",
         "token_expires_in": 600,
         "grant_expires_in": 300,
@@ -112,7 +112,17 @@ CONFIG = {
                 'kwargs': {'user': 'diana'}
                 }
             ],
+        'cookie_dealer': {
+            'symkey': 'ghsNKDDLshZTPn974nOsIGhedULrsqnsGoBFBLwUKuJhE2ch',
+            'cookie': {
+                'name': 'fedoidc_op',
+                'domain': "127.0.0.1",
+                'path': '/',
+                'max_age': 3600
+                }
+            },
         'federation': {
+            'fo_priority': ['https://edugain.org/', 'https://swamid.sunet.se/'],
             'signer': {
                 'signing_service': {
                     'type': 'internal',
@@ -131,6 +141,6 @@ CONFIG = {
         'cert': 'certs/cert.pem',
         'key': 'certs/key.pem',
         'cert_chain': '',
-        'port': 8100,
+        'port': 8102,
         }
     }
